@@ -41,7 +41,6 @@ return new class extends Migration
             $table->date('date_confirm');
             $table->datetime('date_update')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('branch_id');
             $table->enum('status', ['Pending', 'Confirmed', 'Cancelled'])->default('Pending');
             $table->datetime('cancel_date')->nullable();
             $table->unsignedBigInteger('cancel_by')->nullable();
@@ -53,7 +52,6 @@ return new class extends Migration
             $table->foreign('com_currency')->references('id')->on('currencies');
             $table->foreign('exchange_currency')->references('id')->on('currencies');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('branch_id')->references('id')->on('branches');
         });
     }
 

@@ -11,10 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! Schema::hasColumn('send_hawala', 'branch_id')) {
+            return;
+        }
+
         Schema::table('send_hawala', function (Blueprint $table) {
-            // Drop the foreign key constraint first
-            $table->dropForeign(['branch_id']);
-            // Drop the branch_id column
+            // Drop the foreign key constraint first (if present).
+            // On SQLite dropForeign is a no-op when the constraint is missing,
+            // but on other drivers it may throw, so we guard with a try/catch.
+            try {
+                $table->dropForeign(['branch_id']);
+            } catch (\Throwable $e) {
+                // Foreign key may not exist (e.g. branches table was already
+                // dropped by an earlier migration). Safe to ignore.
+            }
             $table->dropColumn('branch_id');
         });
     }
@@ -24,10 +34,14 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (Schema::hasColumn('send_hawala', 'branch_id')) {
+            return;
+        }
+
         Schema::table('send_hawala', function (Blueprint $table) {
-            // Re-add the branch_id column
-            $table->unsignedBigInteger('branch_id')->after('user_id');
-            // Note: Cannot restore foreign key as branches table no longer exists
+            // Re-add the branch_id column. Nullable because the branches
+            // table no longer exists and we cannot restore the foreign key.
+            $table->unsignedBigInteger('branch_id')->nullable()->after('user_id');
         });
     }
 };
