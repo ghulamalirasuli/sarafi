@@ -7,9 +7,7 @@ use App\Models\User;
 use App\Models\Bank;
 use App\Models\AgencyLedger;
 use App\Models\BankLedger;
-use App\Models\BranchLedger;
 use App\Models\Currency;
-use App\Models\Branch;
 use App\Models\IncomeLedger;
 use App\Models\CashBox;
 use App\Models\Customer;
@@ -37,19 +35,17 @@ class SendHawalaController extends Controller
             DB::raw('(SELECT currency_name FROM currency WHERE uid = send_hawala.com_currency) as CCurrency'),
         );
         $send_hawala = $query->orderbyDesc('send_hawala.created_at')->get();
-        $branches=Branch::all();
         $agencys=Agency::all();
-        return view('send_hawala.index',compact('send_hawala','branches'));
+        return view('send_hawala.index',compact('send_hawala'));
     }
 
     public function create()
     {
         $agencys = Agency::all();
         $currencies = Currency::all();
-        $branches = Branch::all();
         $customers = Customer::all();
         $banks = Bank::all();
-        return view('send_hawala.create', compact('agencys', 'currencies', 'branches', 'customers', 'banks'));
+        return view('send_hawala.create', compact('agencys', 'currencies', 'customers', 'banks'));
     }
 
     public function show(Request $request,$id)
@@ -57,10 +53,9 @@ class SendHawalaController extends Controller
         $hawala = SendHawala::findOrFail($id);
         $agencys = Agency::all();
         $currencies = Currency::all();
-        $branches = Branch::all();
         $customers = Customer::all();
         $banks = Bank::all();
-        return view('send_hawala.show', compact('hawala', 'agencys', 'currencies', 'branches', 'customers', 'banks'));
+        return view('send_hawala.show', compact('hawala', 'agencys', 'currencies', 'customers', 'banks'));
     }
 
     public function store(Request $request)
@@ -87,7 +82,6 @@ class SendHawalaController extends Controller
         $sendHawala = SendHawala::create([
             'reciever_agency' => $request->reciever_agency,
             'user_id' => Auth::id(),
-            'branch_id' => Auth::user()->branch_id,
             'sender' => $request->sender,
             'reciever' => $request->reciever,
             'sender_currency' => $request->sender_currency,
@@ -122,10 +116,9 @@ class SendHawalaController extends Controller
         $hawala = SendHawala::findOrFail($id);
         $agencys = Agency::all();
         $currencies = Currency::all();
-        $branches = Branch::all();
         $customers = Customer::all();
         $banks = Bank::all();
-        return view('send_hawala.edit', compact('hawala', 'agencys', 'currencies', 'branches', 'customers', 'banks'));
+        return view('send_hawala.edit', compact('hawala', 'agencys', 'currencies', 'customers', 'banks'));
     }
 
     public function update(Request $request, $id)
@@ -212,9 +205,8 @@ class SendHawalaController extends Controller
     public function getdue_type($due_type)
     {
         $customers = Customer::all();
-        $branches = Branch::all();
         $banks = Bank::all();
-        $returnHTML = view('send_hawala.pay_type', compact('due_type', 'customers', 'branches', 'banks'))->render();
+        $returnHTML = view('send_hawala.pay_type', compact('due_type', 'customers', 'banks'))->render();
         return response()->json([$returnHTML]);
     }
 
@@ -275,9 +267,6 @@ class SendHawalaController extends Controller
             case 'Customer':
                 $customer = Customer::find($request->customer);
                 return $customer ? $customer->fullname : '';
-            case 'Branch':
-                $branch = Branch::find($request->branch_name);
-                return $branch ? $branch->branch_name : '';
             case 'Bank':
                 $bank = Bank::find($request->bank);
                 return $bank ? $bank->bankname : '';
@@ -293,7 +282,6 @@ class SendHawalaController extends Controller
 
         IncomeLedger::create([
             'date' => now(),
-            'branch_id' => Auth::user()->branch_id,
             'currency' => $hawala->com_currency,
             'amount' => $request->com_amount,
             'description' => 'Commission from Send Hawala',
@@ -305,7 +293,6 @@ class SendHawalaController extends Controller
             case 'Cash':
                 CashBox::create([
                     'date' => now(),
-                    'branch_id' => Auth::user()->branch_id,
                     'currency' => $request->sender_currency,
                     'amount' => $cash_amount,
                     'description' => 'Payment for Send Hawala',
@@ -316,17 +303,6 @@ class SendHawalaController extends Controller
             case 'Customer':
                 CustomerLedger::create([
                     'customer_id' => $request->customer,
-                    'date' => now(),
-                    'currency' => $request->sender_currency,
-                    'amount' => $cash_amount,
-                    'description' => 'Payment for Send Hawala',
-                    'type' => 'Out',
-                    'status' => 'Confirmed',
-                ]);
-                break;
-            case 'Branch':
-                BranchLedger::create([
-                    'branch_id' => $request->branch_name,
                     'date' => now(),
                     'currency' => $request->sender_currency,
                     'amount' => $cash_amount,
@@ -359,7 +335,6 @@ class SendHawalaController extends Controller
             DB::raw('(SELECT currency_name FROM currency WHERE uid = send_hawala.sender_currency) as RCurrency'),
             DB::raw('(SELECT currency_name FROM currency WHERE uid = send_hawala.exchange_currency) as ECurrency'),
             DB::raw('(SELECT currency_name FROM currency WHERE uid = send_hawala.com_currency) as CCurrency'),
-            DB::raw('(SELECT branch_name FROM branches WHERE uid = send_hawala.branch_id) as Branch'),
         );
         $hawala = $query->where('id',$id)->first();
         $service = null; // Service model not found, placeholder
