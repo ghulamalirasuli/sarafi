@@ -152,13 +152,12 @@
                     <select name="pay_type" id="pay_type" onchange="getdue_type(this.value);" class="form-control">
                       <option value="Cash" {{ $hawala->due_type == 'Cash' ? 'selected' : '' }}>{{ __('نقدی') }}</option>
                       <option value="Customer" {{ $hawala->due_type == 'Customer' ? 'selected' : '' }}>{{ __('مشتری') }}</option>
-                      <option value="Branch" {{ $hawala->due_type == 'Branch' ? 'selected' : '' }}>{{ __('شعبه') }}</option>
                       <option value="Bank" {{ $hawala->due_type == 'Bank' ? 'selected' : '' }}>{{ __('بانک') }}</option>
                     </select>
                   </div>
                   <div class="col-sm-3">
                     <div id="due_type">
-                      @include('send_hawala.pay_type', ['due_type' => $hawala->due_type ?? 'Cash', 'customers' => $customers, 'branches' => $branches, 'banks' => $banks])
+                      @include('send_hawala.pay_type', ['due_type' => $hawala->due_type ?? 'Cash', 'customers' => $customers, 'banks' => $banks])
                     </div>
                   </div>
                 </div>
