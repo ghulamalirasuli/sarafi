@@ -6,6 +6,11 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+<img width="1918" height="903" alt="image" src="https://github.com/user-attachments/assets/e6c96f15-6e5d-4c14-aa85-7da749e389b9" />
+<img width="1918" height="892" alt="image" src="https://github.com/user-attachments/assets/e1d6c30f-1238-47dc-aff6-135de759ca8e" />
+<img width="1918" height="891" alt="image" src="https://github.com/user-attachments/assets/7cd9422d-c6c1-48d2-bf1e-91e409f5b11a" />
+<img width="1918" height="903" alt="image" src="https://github.com/user-attachments/assets/3fe616f0-99b2-485d-82af-74013d16c775" />
+<img width="1918" height="902" alt="image" src="https://github.com/user-attachments/assets/3868b03f-cc85-4b06-94fb-a42948dc847d" />
 
 ## About Laravel
 
