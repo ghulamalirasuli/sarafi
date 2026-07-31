@@ -13,7 +13,7 @@ class MoneyExchange extends Model
         'uid', 'reference_no', 'pay_type', 'customer_id', 'from_currency', 'to_currency', 'market_rate', 'rate', 'action',
         'amount', 'market_amount', 'rate_amount', 'benefit', 'description',
         'user_id', 'user_name', 'status', 'cancel_date', 'cancel_by',
-        'date_confirm', 'update_user_name', 'update_user_id', 'branch_name', 'source'
+        'date_confirm', 'update_user_name', 'update_user_id', 'source'
     ];
 
     protected function casts(): array

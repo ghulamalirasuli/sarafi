@@ -19,7 +19,6 @@
         <div class="header row">
             <div class="col">{{ __('ارسال به') }}: {{ $hawala->Agency ?? 'N/A' }}</div>
             <div class="col">{{ __('حواله #') }}: {{ $hawala->hawala_no }}</div>
-            <div class="col">{{ __('شعبه') }}: {{ $hawala->Branch ?? 'N/A' }}</div>
             <div class="col">{{ __('تاریخ') }}: {{ $hawala->date_update?->format('Y-m-d H:i') }}</div>
         </div>
         

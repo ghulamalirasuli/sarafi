@@ -13,7 +13,6 @@ class MoneyTransfer extends Model
         'uid', 'reference_no', 'from_customer', 'bill_no1', 'to_customer', 'bill_no2',
         'amount', 'currency_id', 'description', 'user_id', 'user_name', 'status',
         'cancel_date', 'cancel_by', 'date_confirm', 'update_user_name', 'update_user_id',
-        'branch_name', 'branch_id'
     ];
 
     protected function casts(): array

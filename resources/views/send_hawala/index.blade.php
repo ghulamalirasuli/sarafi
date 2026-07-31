@@ -109,10 +109,6 @@
           </thead>
           <tbody>
             @foreach($send_hawala as $key => $ledger)
-            @php
-            $showRecord = (Auth::user()->user_type == "Mainadmin" || Auth::user()->user_type == "Simpleuser" || $ledger->branch_id == Auth::user()->branch_id) ? true : false;
-        @endphp
-        @if($showRecord)
             <tr>
               <td>{{ ++$key }} </td>
               <td>{{ $ledger->date_confirm }}<br>
@@ -120,9 +116,7 @@
               </td>
 
               <td>{{ $ledger->UserName }} </td>
-              <td>{{ $ledger->Agency }}<br>
-                <small>{{ $ledger->Branch }}</small>
-              </td>
+              <td>{{ $ledger->Agency }}</td>
               <td>{{$ledger->sender }} <b>({{number_format($ledger->sender_amount) }} {{$ledger->RCurrency}})</b></td>
               <td>{{$ledger->reciever }} <b>({{number_format($ledger->exchange_amount) }} {{$ledger->ECurrency}})</b></td>
               <td>{{ $ledger->rate }}</td>
@@ -148,7 +142,6 @@
                   <a href="{{ route('send_hawala.printPreview', $ledger->id) }}" class="btn btn-sm btn-primary" target="_blank">{{ __('Print') }}</a>
                 @endif
            </tr>
-           @endif
            @endforeach
           </tbody>
         </table>
